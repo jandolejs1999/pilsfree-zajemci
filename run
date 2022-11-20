@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+
+cd "$(dirname "$0")"
+
+echo "Run - Start: $(date)" >> "$(pwd)/runs"
+
+docker run -u 1000:1000 --rm --env-file "$(pwd)/.env" -v "$(pwd)":/app -w /app php php get.php 2> error
+
+echo "Run - Stop: $(date)" >> "$(pwd)/runs"
