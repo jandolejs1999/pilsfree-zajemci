@@ -10,8 +10,6 @@
 
 function login() {
 
-    file_put_contents('debug', date("Y/m/d h:i:j") . " Logged in used" . "\n", FILE_APPEND);
-
     // Firstly set cookie for pf web
     $ch = curl_init('https://login.pilsfree.net');
     curl_setopt_array($ch, array(
@@ -96,12 +94,7 @@ function process(array $list) {
         // Little phone parsing
         $phone = $record['tel'];
         $phone = preg_replace("~\s~", '', $phone);
-        $phone = str_replace("+420", '', $phone);
         $phone = trim($phone);
-
-        if (strlen($phone) != 9) {
-            continue;
-        }
 
         $sent = file_get_contents('used');
         $sent = explode("\n", $sent);
@@ -120,7 +113,7 @@ function process(array $list) {
                 'chat_id' => $_ENV['TELEGRAM_ID'],
                 'disable_web_page_preview' => 1,
                 'parse_mode' => 'html',
-                'text' => "Nový zájemce: $name\nPhone: +420$phone\nPlace: $addr\nLink: $link",
+                'text' => "Nový zájemce: $name\nPhone: $phone\nPlace: $addr\nLink: $link",
             ],
         ));
         curl_exec($ch);
